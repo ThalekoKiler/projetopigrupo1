@@ -35,9 +35,3 @@ Instale ele pelo VSCODE, utilizando o comando "flutter pub get".
 
 ### Flutter:
 Rode com o comando no VSCODE "flutter run".
-
-## Por que este README é eficaz?
-1.  **Contextualização**: Ele explica o "porquê" do projeto, mencionando o impacto na eficiência da clínica.
-2.  **Decisões de Engenharia**: Destaca o uso de **Inferência On-Device** e **MVVM**, o que demonstra maturidade técnica perante avaliadores ou recrutadores.
-3.  **Segurança**: Ressalta o compromisso com a **LGPD**, algo crítico para apps que lidam com fotos e dados de saúde.
-4.  **Organização**: Facilita a navegação para os outros documentos (`rf.md`, `rnf.md`) que criámos anteriormente.
