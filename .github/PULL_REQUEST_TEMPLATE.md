@@ -41,4 +41,3 @@ Relates to: #YY
 ---
 > **Nota de Engenharia**: Este PR deve respeitar a segregação de responsabilidades arquiteturais  e garantir que não restem falhas sistêmicas
 <img width="299" height="169" alt="image" src="https://github.com/user-attachments/assets/28c4e14d-e58b-4c00-a6f4-900011c889da" />
-<img width="299" height="169" alt="image" src="https://github.com/user-attachments/assets/28c4e14d-e58b-4c00-a6f4-900011c889da" />
