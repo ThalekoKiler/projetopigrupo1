@@ -26,6 +26,8 @@ Acesse os detalhes do planejamento nos links abaixo:
 - [Requisitos Não Funcionais (RNF)](docs/rnf.md)
 - [Regras de Negócio (RN)](docs/rn.md)
 
+---
+
 ## Dependências para funcionar o app:
 
 ### Flutter: 
