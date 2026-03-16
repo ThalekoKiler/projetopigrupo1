@@ -11,4 +11,4 @@ Estes requisitos descrevem as funcionalidades diretas que o paciente e o dentist
 | **RF05** | Galeria de Tratamentos | O dentista pode anexar fotos (IA de imagem) para acompanhamento da evolução. | Baixa |
 | **RF06** | Gestão de Prontuário | Área restrita ao dentista para anotar procedimentos realizados e prescrições. | Alta |
 
-> **Nota:** O fluxo principal foca na redução do [absenteísmo](# "refere-se ao índice de ausências dos colaboradores no trabalho, incluindo faltas (justificadas ou não), atrasos e saídas antecipadas") e na facilidade de marcação sem necessidade de chamadas telefônicas.
+> **Nota:** O fluxo principal foca na redução do [absenteísmo](# "Refere-se ao índice de ausências dos colaboradores no trabalho, incluindo faltas (justificadas ou não), atrasos e saídas antecipadas") e na facilidade de marcação sem necessidade de chamadas telefônicas.
