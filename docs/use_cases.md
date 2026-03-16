@@ -5,7 +5,7 @@
 ### Ator Principal: 
 - Paciente
 
-### Requisito Relacionado: 
+### Requisito: 
 - [RF01](rf.md)
 
 ### Fluxo Principal:
@@ -74,3 +74,7 @@
 2. Anexa fotos do tratamento para acompanhar a evolução [RF05](rf.md).
 3. O sistema processa as imagens localmente para garantir privacidade [RN05](rn.md).
 4. Todos os dados são salvos com criptografia conforme LGPD [RN06](rn.md).
+
+---
+
+## UC06 - 
