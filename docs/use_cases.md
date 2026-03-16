@@ -92,7 +92,7 @@
 
 --- 
 
-## UC07 - Suporte Pós-Procedimento (Concierge IA):
+## UC07 - Suporte Pós-Procedimento [Concierge IA](# "É um assistente virtual inteligente, disponível 24/7, que utiliza inteligência artificial para oferecer atendimento personalizado, agendamentos automáticos e suporte em tempo real, comum em turismo, e-commerce e saúde"):
 
 ### Ator Principal: 
 - Sistema / Paciente 
