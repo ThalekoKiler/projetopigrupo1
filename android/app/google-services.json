@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "48584591131",
+    "project_id": "odontounifeob",
+    "storage_bucket": "odontounifeob.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48584591131:android:e51eb94d2fc05f07e4b5be",
+        "android_client_info": {
+          "package_name": "com.example.pi_projeto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48584591131-n9k0aj8o2pfhv9ooikcsrf8ddingrol5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pi_projeto",
+            "certificate_hash": "49b12abbbeb9df5b7361ee7443c06f74587f7aaf"
+          }
+        },
+        {
+          "client_id": "48584591131-a21g9g8kasbcbn8ofirmfom0vvqgnn7k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATDdlR3VF0LBqJrYgtBD5UglE-mqy03OU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48584591131-a21g9g8kasbcbn8ofirmfom0vvqgnn7k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
