@@ -1,5 +1,12 @@
 # CASOS DE USO - Dra Thais Tardelli
 
+## Visão Geral do Sistema (Casos de Uso)
+Este diagrama apresenta a interação de todos os atores com as funcionalidades do sistema.
+
+![Diagrama de Casos de Uso Geral](../assets/images/diagramas/casos_uso_geral.png)
+
+---
+
 ## UC01 - Cadastro de Novo Paciente
 
 ### Ator Principal: 
@@ -12,6 +19,8 @@
 1. O usuário acessa o app e seleciona "Criar Perfil".
 2. O usuário insere dados pessoais e histórico básico.
 3. O sistema valida os dados e salva o perfil.
+
+![Diagrama UC01](../assets/images/diagramas/UC01.png)
 
 ---
 
@@ -29,6 +38,8 @@
 3. Fluxo de Exceção (Emergência): Se o paciente selecionar "Dor Aguda", o sistema prioriza horários de encaixe ou fornece contato direto [RN03](rn.md)
 4. O paciente confirma a escolha.
 
+![Diagrama UC02](../assets/images/diagramas/UC02.png)
+
 --- 
 
 ## UC03 - Confirmação de Consulta
@@ -44,6 +55,8 @@
 2. O paciente clica no link de confirmação recebido.
 3. O status da consulta muda para "Confirmada" [RN04](rn.md)
 
+![Diagrama UC03](../assets/images/diagramas/UC03.png)
+
 ---
 
 ### UC04 - Cancelamento ou Reagendamento
@@ -58,6 +71,8 @@
 1. O paciente solicita o cancelamento da consulta.
 2. O sistema verifica se a solicitação está sendo feita com mais de 24h de antecedência [RN01](rn.md).
 3. Se sim, o cancelamento é processado sem custos.
+
+![Diagrama UC04](../assets/images/diagramas/UC04.png)
 
 --- 
 
@@ -75,6 +90,8 @@
 3. O sistema processa as imagens localmente para garantir privacidade [RN05](rn.md).
 4. Todos os dados são salvos com criptografia conforme LGPD [RN06](rn.md).
 
+![Diagrama UC05](../assets/images/diagramas/UC05.png)
+
 ---
 
 ## UC06 - Análise Evoluitiva Automática: 
@@ -89,6 +106,8 @@
 1. O dentista acessa a galeria do paciente e seleciona "Comparar Evolução".
 2. O sistema solicita o upload ou captura de uma foto atual e seleciona a foto anterior (âncora).
 3. A IA processa as imagens, sobrepõe as camadas e gera um gráfico de retração ou clareamento.
+
+![Diagrama UC06](../assets/images/diagramas/UC06.png)
 
 --- 
 
@@ -105,6 +124,8 @@
 2. O sistema dispara mensagens automáticas via chat/push em intervalos pré-definidos (4h, 12h, 24h).
 3. O paciente interage confirmando bem-estar ou relatando sintomas.
 
+![Diagrama UC07](../assets/images/diagramas/UC07.png)
+
 --- 
 
 ## UC08 - Simulação de Sorriso (Realidade Aumentada): 
@@ -119,6 +140,8 @@
 1. O usuário seleciona a opção "Preview de Sorriso" no menu de tratamentos.
 2. O sistema ativa a câmera frontal e aplica o filtro 3D com as lentes de contato dentais.
 3. O usuário visualiza o resultado e salva a imagem para anexar à solicitação de orçamento.
+
+![Diagrama UC08](../assets/images/diagramas/UC08.png)
 
 --- 
 
@@ -135,6 +158,8 @@
 2. O sistema processa a imagem via algoritmo de visão computacional para identificar cáries ou inflamações.
 3. O sistema destaca as áreas afetadas e sugere o código CID para preenchimento automático do prontuário.
 
+![Diagrama UC09](../assets/images/diagramas/UC09.png)
+
 --- 
 
 ## UC10 - Gestão de Lista de Espera Inteligente: 
@@ -150,4 +175,11 @@
 2. O sistema filtra pacientes em espera com base em localização (proximidade) e urgência do perfil.
 3. O sistema envia uma notificação de "Vaga Prioritária" para os candidatos selecionados e confirma o primeiro aceite.
 
+![Diagrama UC10](../assets/images/diagramas/UC10.png)
 
+--- 
+
+## Arquitetura de Dados (Diagrama de Classes)
+Abaixo, a representação da estrutura MVVM e das entidades do banco de dados.
+
+![Diagrama de Classes](../assets/images/diagramas/diagrama_classes.png)
