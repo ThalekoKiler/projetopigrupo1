@@ -60,7 +60,9 @@ class _HomePageState extends State<HomePage> {
                 ListTile(
                   leading: const Icon(Icons.edit),
                   title: const Text('Editar Perfil'),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.editProfile);
+                  },
                 ),
                 const Divider(),
                 ListTile(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,35 +12,45 @@ class LoginViewModel extends ChangeNotifier {
   bool obscurePassword = true;
   bool isLoading = false;
 
-  // Instâncias do Firebase e Google
+  // Criação das Instâncias da Google e Firebase
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   // --- Validações ---
-  String? emailValidator(String? value) {
-    return Validatorless.multiple([
-      Validatorless.required('O e-mail é obrigatório.'),
-      Validatorless.max(254, 'O e-mail é longo demais.'),
-      Validatorless.email('Digite um e-mail válido.'),
-    ])(value);
-  }
+  String? emailValidator(String? value) => Validatorless.multiple([
+    Validatorless.required('O e-mail é obrigatório.'),
+    Validatorless.max(254, 'O e-mail é longo demais.'),
+  ])(value);
 
-  String? passwordValidator(String? value) {
-    return Validatorless.multiple([
-      Validatorless.required('A senha é obrigatória.'),
-      Validatorless.min(6, 'A senha deve ter pelo menos 6 caracteres.'),
-    ])(value);
-  }
+  String? passwordValidator(String? value) => Validatorless.multiple([
+    Validatorless.required('A senha é obrigatória.'),
+    Validatorless.min(6, 'A senha deve ter pelo menos 6 caracteres.'),
+  ])(value);
 
-  // --- Lógica de UI ---
   void togglePasswordVisibility() {
     obscurePassword = !obscurePassword;
     notifyListeners();
   }
 
-  // --- Login Email e Senha ---
+  // --- FUNÇÃO AUXILIAR PARA DECIDIR A ROTA ---
+  // Visa evitar repetição de código
+  Future<String> _definirRotaDestino(String uid) async {
+    DocumentSnapshot userDoc = await _firestore
+        .collection('usuarios')
+        .doc(uid)
+        .get();
+
+    if (userDoc.exists) {
+      String role = userDoc.get('role') ?? 'paciente';
+      return (role == 'admin') ? '/home-admin' : '/home';
+    }
+    return '/home';
+  }
+
+  // --- Login / Email / Senha ---
   Future<void> onLoginPressed({
-    required VoidCallback onSuccess,
+    required Function(String rota) onSuccess,
     required Function(String mensagem) onError,
   }) async {
     final formValid = formKey.currentState?.validate() ?? false;
@@ -49,23 +60,24 @@ class LoginViewModel extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      // Login Real no Firebase
-      await _auth.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
+      String loginInput = emailController.text.trim();
+      String passwordInput = passwordController.text.trim();
+
+      if (loginInput.toUpperCase() == 'THAIS2026') {
+        loginInput = "tvasconcellostardelli@gmail.com";
+      }
+
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: loginInput,
+        password: passwordInput,
       );
 
-      onSuccess();
+      // BUSCA A ROTA BASEADA NO CARGO
+      String rota = await _definirRotaDestino(userCredential.user!.uid);
+      onSuccess(rota);
     } on FirebaseAuthException catch (e) {
-      // Tratamento de erros específicos do Firebase
-      String mensagem = "Falha ao entrar";
-      if (e.code == 'user-not-found' ||
-          e.code == 'wrong-password' ||
-          e.code == 'invalid-credential') {
-        mensagem = "E-mail ou senha incorretos.";
-      } else if (e.code == 'user-disabled') {
-        mensagem = "Este usuário foi desativado.";
-      }
+      String mensagem = "E-mail ou senha incorretos.";
+      if (e.code == 'user-disabled') mensagem = "Este usuário foi desativado.";
       onError(mensagem);
     } catch (e) {
       onError("Erro inesperado: ${e.toString()}");
@@ -75,38 +87,36 @@ class LoginViewModel extends ChangeNotifier {
     }
   }
 
-  // --- LOGIN COM GOOGLE ---
+  // --- Login com o Google ---
   Future<void> onGoogleLoginPressed({
-    required VoidCallback onSuccess,
+    required Function(String rota) onSuccess,
     required Function(String mensagem) onError,
   }) async {
     try {
       isLoading = true;
       notifyListeners();
 
-      // 1. Abre a janelinha do Google para escolher a conta
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-
       if (googleUser == null) {
         isLoading = false;
         notifyListeners();
-        return; // Usuário cancelou
+        return;
       }
 
-      // 2. Pega os dados da autenticação
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
-
-      // 3. Cria a credencial para o Firebase
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // 4. Faz o login no Firebase
-      await _auth.signInWithCredential(credential);
+      UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
 
-      onSuccess();
+      // BUSCA A ROTA BASEADA NO CARGO (Mesmo no Google)
+      String rota = await _definirRotaDestino(userCredential.user!.uid);
+      onSuccess(rota);
     } catch (e) {
       onError("Erro ao entrar com Google: $e");
     } finally {

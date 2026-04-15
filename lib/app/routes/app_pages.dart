@@ -3,6 +3,8 @@ import 'package:pi_projeto/app/routes/app_routes.dart';
 import 'package:pi_projeto/features/auth/views/login_page.dart';
 import 'package:pi_projeto/features/auth/views/register_page.dart';
 import 'package:pi_projeto/features/home/pages/agenda_page.dart';
+import 'package:pi_projeto/features/home/pages/edit_profile_page.dart';
+import 'package:pi_projeto/features/home/views/homeAdmin.dart';
 import 'package:pi_projeto/features/home/views/homeOdontoApp.dart';
 import 'package:pi_projeto/features/splash/views/splash_page.dart';
 
@@ -13,5 +15,7 @@ abstract class AppPages {
     AppRoutes.home: (_) => const HomePage(),
     AppRoutes.splash: (_) => const SplashPage(),
     AppRoutes.agenda: (_) => const AgendaPage(),
+    AppRoutes.homeAdmin: (_) => const HomeAdminPage(),
+    AppRoutes.editProfile: (_) => const EditProfilePage(),
   };
 }

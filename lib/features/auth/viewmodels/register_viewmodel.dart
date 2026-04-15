@@ -6,7 +6,7 @@ import 'package:validatorless/validatorless.dart';
 class RegisterViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
 
-  // Controllers
+  // Controllers (REMOVIDO adminCodigoController)
   final nomeController = TextEditingController();
   final emailController = TextEditingController();
   final dataController = TextEditingController();
@@ -17,7 +17,6 @@ class RegisterViewModel extends ChangeNotifier {
   bool isLoading = false;
   String dddPais = '+55';
 
-  // Instâncias do Firebase
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -43,13 +42,11 @@ class RegisterViewModel extends ChangeNotifier {
   String? dataValidator(String? value) =>
       Validatorless.required('A data é obrigatória.')(value);
 
-  // --- Lógica de UI ---
   void togglePasswordVisibility() {
     obscurePassword = !obscurePassword;
     notifyListeners();
   }
 
-  // --- LÓGICA DE REGISTRO ---
   Future<void> onRegisterPressed(
     BuildContext context,
     VoidCallback onSuccess,
@@ -61,20 +58,13 @@ class RegisterViewModel extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      // 1. Criar usuário no Firebase Auth (E-mail e Senha)
-      debugPrint("Tentando criar usuário no Auth...");
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(
             email: emailController.text.trim(),
             password: senhaController.text.trim(),
           );
 
-      // 2. Salvar dados adicionais no Firestore
       if (userCredential.user != null) {
-        debugPrint(
-          "Usuário criado! UID: ${userCredential.user!.uid}. Salvando no Firestore...",
-        );
-
         await _firestore
             .collection('usuarios')
             .doc(userCredential.user!.uid)
@@ -85,35 +75,12 @@ class RegisterViewModel extends ChangeNotifier {
               'telefone': "$dddPais ${telefoneController.text}",
               'uid': userCredential.user!.uid,
               'criadoEm': FieldValue.serverTimestamp(),
+              'role': "paciente",
             });
-
-        debugPrint("Dados salvos com sucesso no Firestore!");
       }
-
       onSuccess();
-    } on FirebaseAuthException catch (e) {
-      debugPrint("ERRO FIREBASE AUTH: ${e.code} - ${e.message}");
-      String mensagem = "Erro ao cadastrar";
-
-      if (e.code == 'email-already-in-use') {
-        mensagem = "Este e-mail já está em uso.";
-      } else if (e.code == 'weak-password') {
-        mensagem = "A senha é muito fraca.";
-      } else if (e.code == 'network-request-failed') {
-        mensagem = "Verifique sua conexão com a internet.";
-      }
-
-      _mostrarErro(context, mensagem);
     } catch (e) {
-      debugPrint("========= ERRO DETALHADO =========");
-      debugPrint("TIPO DO ERRO: ${e.runtimeType}");
-      debugPrint("MENSAGEM: $e");
-      debugPrint("==================================");
-
-      _mostrarErro(
-        context,
-        "Erro no banco de dados. Verifique as permissões do Firestore.",
-      );
+      _mostrarErro(context, "Erro ao cadastrar. Verifique os dados.");
     } finally {
       isLoading = false;
       notifyListeners();
@@ -122,26 +89,17 @@ class RegisterViewModel extends ChangeNotifier {
 
   void _mostrarErro(BuildContext context, String mensagem) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(mensagem),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-      ),
+      SnackBar(content: Text(mensagem), backgroundColor: Colors.red),
     );
   }
 
-  // --- GERENCIAMENTO DE MEMÓRIA ---
-  void disposeControllers() {
+  @override
+  void dispose() {
     nomeController.dispose();
     emailController.dispose();
     dataController.dispose();
     telefoneController.dispose();
     senhaController.dispose();
-  }
-
-  @override
-  void dispose() {
-    disposeControllers();
     super.dispose();
   }
 }

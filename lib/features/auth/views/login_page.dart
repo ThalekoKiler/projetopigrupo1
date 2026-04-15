@@ -18,7 +18,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // Instanciamos a ViewModel aqui
   late final LoginViewModel viewModel;
 
   @override
@@ -29,11 +28,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    viewModel.dispose(); // Limpa controllers e listeners
+    viewModel.dispose();
     super.dispose();
   }
 
-  // Função auxiliar para mostrar erros (deixa o código do build mais limpo)
   void _showErrorSnackBar(String mensagem) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -54,14 +52,13 @@ class _LoginPageState extends State<LoginPage> {
           appBar: AppBar(
             backgroundColor: AppColors.CorPrincipal,
             elevation: 0,
-            automaticallyImplyLeading:
-                false, // Remove a seta de voltar se não houver página anterior
+            automaticallyImplyLeading: false,
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: [
-                // Header: Logo e Nome da Dra.
+                // Header do Login
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -114,18 +111,15 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         Espaco.h16,
 
-                        // Campo de E-mail
                         const SubtitulosCadastro(texto: 'E-mail'),
                         CustomInputLabel(
                           text: 'Digite seu email aqui...',
                           controller: viewModel.emailController,
                           validator: viewModel.emailValidator,
-                          // keyboardType: TextInputType.emailAddress, // Dica de UX mencionada antes
                         ),
 
                         Espaco.h16,
 
-                        // Campo de Senha
                         const SubtitulosCadastro(texto: 'Senha'),
                         Inputpassword(
                           text: 'Digite sua senha aqui...',
@@ -137,35 +131,32 @@ class _LoginPageState extends State<LoginPage> {
 
                         Espaco.h08,
 
-                        // Opções extras
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const SubtitulosCadastro(texto: 'Manter conectado'),
                             Subtittlebutton(
                               text: 'Esqueceu a senha?',
-                              onPressed: () {
-                                /* Implementar futuramente ALGUMA função*/
-                              },
+                              onPressed: () {},
                             ),
                           ],
                         ),
 
                         Espaco.h24,
 
-                        // Botão de Entrar com Lógica Refatorada
+                        // --- BOTÃO DE ENTRAR (Ajustado para receber a rota) ---
                         Botao(
                           backgroundColor: AppColors.CorPrincipal,
                           texto: viewModel.isLoading ? 'Aguarde...' : 'Entrar',
                           corDaFonte: Colors.white,
                           onPressed: viewModel.isLoading
-                              ? null // Desabilita o botão enquanto carrega
+                              ? null
                               : () {
                                   viewModel.onLoginPressed(
-                                    onSuccess: () {
+                                    onSuccess: (rota) {
                                       Navigator.pushReplacementNamed(
                                         context,
-                                        AppRoutes.home,
+                                        rota, // Entra na Home correta (Admin ou Paciente)
                                       );
                                     },
                                     onError: (erro) => _showErrorSnackBar(erro),
@@ -182,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         Espaco.h16,
 
-                        // Botão Google
+                        // --- BOTÃO GOOGLE (Ajustado para receber a rota) ---
                         Botao(
                           backgroundColor: Colors.white,
                           texto: 'Continuar com Google',
@@ -195,10 +186,10 @@ class _LoginPageState extends State<LoginPage> {
                               ? null
                               : () {
                                   viewModel.onGoogleLoginPressed(
-                                    onSuccess: () {
+                                    onSuccess: (rota) {
                                       Navigator.pushReplacementNamed(
                                         context,
-                                        AppRoutes.home,
+                                        rota, // Entra na Home correta via Google
                                       );
                                     },
                                     onError: (erro) => _showErrorSnackBar(erro),
@@ -209,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                Espaco.h24, // Espaço extra no final para não colar na borda
+                Espaco.h24,
               ],
             ),
           ),
