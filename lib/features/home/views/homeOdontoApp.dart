@@ -48,13 +48,22 @@ class _HomePageState extends State<HomePage> {
                   accountEmail: Text(
                     FirebaseAuth.instance.currentUser?.email ?? "",
                   ),
-                  currentAccountPicture: const CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.person,
-                      size: 40,
-                      color: HomePage.primaryColor,
-                    ),
+                  currentAccountPicture: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: const Color(0xFFE0E0E0),
+                    backgroundImage:
+                        viewModel.fotoUrl != null &&
+                            viewModel.fotoUrl!.isNotEmpty
+                        ? NetworkImage(viewModel.fotoUrl!)
+                        : null,
+                    child:
+                        viewModel.fotoUrl == null || viewModel.fotoUrl!.isEmpty
+                        ? const Icon(
+                            Icons.person,
+                            size: 35,
+                            color: Color(0xFF9E9E9E),
+                          )
+                        : null,
                   ),
                 ),
                 ListTile(
@@ -95,6 +104,7 @@ class _HomePageState extends State<HomePage> {
                     HomeHeader(
                       primaryColor: HomePage.primaryColor,
                       userName: viewModel.nomeUsuario,
+                      userPhotoUrl: viewModel.fotoUrl,
                     ),
                     const SizedBox(height: 24),
                     const SectionTitle(title: 'Próximo Agendamento'),

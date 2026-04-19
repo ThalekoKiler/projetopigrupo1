@@ -63,7 +63,7 @@ class LoginViewModel extends ChangeNotifier {
       String loginInput = emailController.text.trim();
       String passwordInput = passwordController.text.trim();
 
-      if (loginInput.toUpperCase() == 'THAIS2026') {
+      if (loginInput.toUpperCase() == 'THAIS2026!@') {
         loginInput = "tvasconcellostardelli@gmail.com";
       }
 
