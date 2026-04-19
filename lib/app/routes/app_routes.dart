@@ -6,4 +6,5 @@ abstract class AppRoutes {
   static const String agenda = '/agenda';
   static const String homeAdmin = '/home-admin';
   static const String editProfile = '/edit-profile';
+  static const String chatIa = '/chat-ia';
 }

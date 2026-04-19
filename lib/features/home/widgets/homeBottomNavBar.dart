@@ -34,8 +34,7 @@ class HomeBottomNavBar extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.psychology, color: Colors.white70),
             onPressed: () {
-              // Futuramente: Navigator.pushNamed(context, AppRoutes.ia_dicas);
-              print("Botão IA clicado");
+              Navigator.pushNamed(context, AppRoutes.chatIa);
             },
           ),
           IconButton(
