@@ -54,14 +54,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       Center(
                         child: Stack(
                           children: [
-                            const CircleAvatar(
+                            CircleAvatar(
                               radius: 60,
                               backgroundColor: Color(0xFFE0E0E0),
-                              child: Icon(
-                                Icons.person,
-                                size: 70,
-                                color: Color(0xFF9E9E9E),
-                              ),
+                              backgroundImage:
+                                  viewModel.photoUrlController.text.isNotEmpty
+                                  ? NetworkImage(
+                                      viewModel.photoUrlController.text,
+                                    )
+                                  : null,
+                              child: viewModel.photoUrlController.text.isEmpty
+                                  ? const Icon(
+                                      Icons.person,
+                                      size: 70,
+                                      color: Color(0xFF9E9E9E),
+                                    )
+                                  : null,
                             ),
                             Positioned(
                               bottom: 0,
@@ -69,26 +77,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               child: CircleAvatar(
                                 backgroundColor: AppColors.CorPrincipal,
                                 radius: 18,
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    size: 18,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    // Lógica para trocar a foto que será implementada em breve...
-                                  },
+                                child: const Icon(
+                                  Icons.link,
+                                  size: 18,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                      const TextButton(
-                        onPressed: null,
-                        child: Text(
-                          "CHANGE PHOTO",
-                          style: TextStyle(color: AppColors.CorPrincipal),
                         ),
                       ),
                       Espaco.h32,
@@ -99,6 +95,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         viewModel.nomeController,
                       ),
                       Espaco.h16,
+
+                      _buildField(
+                        "PROFILE IMAGE URL",
+                        Icons.image_outlined,
+                        viewModel.photoUrlController,
+                        hint: "Paste the image link here",
+                      ),
+                      Espaco.h16,
+
                       _buildField(
                         "CPF",
                         Icons.badge_outlined,
@@ -106,6 +111,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         formatter: maskCpf,
                       ),
                       Espaco.h16,
+
                       _buildField(
                         "PHONE NUMBER",
                         Icons.phone_outlined,
@@ -157,6 +163,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     IconData icon,
     TextEditingController controller, {
     MaskTextInputFormatter? formatter,
+    String? hint,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,6 +181,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           controller: controller,
           inputFormatters: formatter != null ? [formatter] : [],
           decoration: InputDecoration(
+            hintText: hint,
             prefixIcon: Icon(icon, color: AppColors.CorPrincipal),
             filled: true,
             fillColor: Colors.white,
@@ -182,6 +190,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
               borderSide: BorderSide.none,
             ),
           ),
+          onChanged: (value) {
+            if (label == "PROFILE IMAGE URL") {
+              setState(() {});
+            }
+          },
         ),
       ],
     );

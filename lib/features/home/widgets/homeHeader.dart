@@ -3,11 +3,13 @@ import "package:flutter/material.dart";
 class HomeHeader extends StatelessWidget {
   final Color primaryColor;
   final String userName;
+  final String? userPhotoUrl;
 
   const HomeHeader({
     super.key,
     required this.primaryColor,
     required this.userName,
+    this.userPhotoUrl,
   });
 
   @override
@@ -27,9 +29,15 @@ class HomeHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
+            radius: 25,
             backgroundColor: Colors.white,
-            child: Icon(Icons.person, color: Colors.grey),
+            backgroundImage: userPhotoUrl != null && userPhotoUrl!.isNotEmpty
+                ? NetworkImage(userPhotoUrl!)
+                : null,
+            child: userPhotoUrl == null || userPhotoUrl!.isEmpty
+                ? const Icon(Icons.person, color: Colors.grey)
+                : null,
           ),
           const SizedBox(width: 12),
           Expanded(

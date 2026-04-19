@@ -9,6 +9,7 @@ class EditProfileViewModel extends ChangeNotifier {
   final nomeController = TextEditingController();
   final cpfController = TextEditingController();
   final telefoneController = TextEditingController();
+  final photoUrlController = TextEditingController();
 
   bool isLoading = false;
   final _auth = FirebaseAuth.instance;
@@ -26,6 +27,7 @@ class EditProfileViewModel extends ChangeNotifier {
         nomeController.text = doc.data()?['nome'] ?? '';
         cpfController.text = doc.data()?['cpf'] ?? '';
         telefoneController.text = doc.data()?['telefone'] ?? '';
+        photoUrlController.text = doc.data()?['photoUrl'] ?? '';
       }
 
       isLoading = false;
@@ -45,6 +47,7 @@ class EditProfileViewModel extends ChangeNotifier {
         'nome': nomeController.text.trim(),
         'cpf': cpfController.text.trim(),
         'telefone': telefoneController.text.trim(),
+        'photoUrl': photoUrlController.text.trim(),
         'ultimaAtualizacao': FieldValue.serverTimestamp(),
       });
 

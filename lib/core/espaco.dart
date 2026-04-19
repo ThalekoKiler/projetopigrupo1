@@ -14,5 +14,6 @@ class Espaco {
   static const w04 = SizedBox(width: 4);
   static const w08 = SizedBox(width: 6);
   static const w06 = SizedBox(width: 8);
+  static const w12 = SizedBox(width: 12);
   static const w16 = SizedBox(width: 16);
 }

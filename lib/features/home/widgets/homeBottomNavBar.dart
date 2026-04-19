@@ -41,8 +41,7 @@ class HomeBottomNavBar extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.person, color: Colors.white70),
             onPressed: () {
-              // Futuramente: Navigator.pushNamed(context, AppRoutes.perfil);
-              print("Botão Perfil clicado");
+              Navigator.pushNamed(context, AppRoutes.editProfile);
             },
           ),
         ],

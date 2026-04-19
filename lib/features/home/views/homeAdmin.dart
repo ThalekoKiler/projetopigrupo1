@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:pi_projeto/app/routes/app_routes.dart';
 import 'package:pi_projeto/core/theme/app_colors.dart';
 import 'package:pi_projeto/core/espaco.dart';
+import 'package:pi_projeto/features/home/pages/admin_selecao_paciente_page.dart';
+import 'package:pi_projeto/features/home/viewmodels/home_admin_viewmodel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeAdminPage extends StatefulWidget {
   const HomeAdminPage({super.key});
@@ -14,56 +15,83 @@ class HomeAdminPage extends StatefulWidget {
 }
 
 class _HomeAdminPageState extends State<HomeAdminPage> {
-  int _abaAtual = 0; // Controla qual aba está ativa (0 = Agenda, 1 = Perfil)
-  String get dataHoje => DateFormat("EEEE, d MMMM").format(DateTime.now());
+  late final HomeAdminViewModel viewModel;
+  int _abaAtual = 0;
+
+  String get dataHoje =>
+      DateFormat("EEEE, d MMMM", "pt_BR").format(DateTime.now());
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = HomeAdminViewModel();
+    viewModel.carregarDados();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Lista de telas que mudam conforme a aba selecionada
-    final List<Widget> _telas = [_buildCorpoAgenda(), _buildCorpoPerfil()];
+    return AnimatedBuilder(
+      animation: viewModel,
+      builder: (context, _) {
+        final List<Widget> telas = [_buildCorpoAgenda(), _buildCorpoPerfil()];
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF4F6F9),
-      appBar: AppBar(
-        title: Text(
-          _abaAtual == 0 ? 'Painel da Dentista' : 'Configurações',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: AppColors.CorPrincipal,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.exit_to_app, color: Colors.white),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              if (mounted)
-                Navigator.pushReplacementNamed(context, AppRoutes.login);
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: AppColors.CorPrincipal,
+            child: const Icon(Icons.add, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AdminSelecaoPacientePage(),
+                ),
+              );
             },
           ),
-        ],
-      ),
-      body: _telas[_abaAtual], // Aqui o Flutter decide qual aba mostrar
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _abaAtual,
-        onTap: (index) => setState(() => _abaAtual = index),
-        selectedItemColor: AppColors.CorPrincipal,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Agenda',
+          backgroundColor: const Color(0xFFF4F6F9),
+          appBar: AppBar(
+            title: Text(
+              _abaAtual == 0 ? 'Painel da Dentista' : 'Configurações',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            backgroundColor: AppColors.CorPrincipal,
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.exit_to_app, color: Colors.white),
+                onPressed: () => _confirmarSair(),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
-        ],
-      ),
+          body: viewModel.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : telas[_abaAtual],
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _abaAtual,
+            onTap: (index) => setState(() => _abaAtual = index),
+            selectedItemColor: AppColors.CorPrincipal,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_today),
+                label: 'Agenda',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Perfil',
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  // --- WIDGET DA ABA AGENDA ---
+  // --- ABA AGENDA ---
   Widget _buildCorpoAgenda() {
     return SafeArea(
       child: SingleChildScrollView(
@@ -71,13 +99,37 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Olá, Dra. Thais!',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              dataHoje,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: Colors.white,
+                  backgroundImage:
+                      viewModel.fotoUrl != null && viewModel.fotoUrl!.isNotEmpty
+                      ? NetworkImage(viewModel.fotoUrl!)
+                      : null,
+                  child: viewModel.fotoUrl == null || viewModel.fotoUrl!.isEmpty
+                      ? const Icon(Icons.person, color: Colors.grey, size: 30)
+                      : null,
+                ),
+                Espaco.w12,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Olá, Dra. ${viewModel.nomeAdmin.split(' ')[0]}!',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      dataHoje,
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ],
             ),
             Espaco.h24,
             const Text(
@@ -92,34 +144,58 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
     );
   }
 
-  // --- WIDGET DA ABA PERFIL ---
+  // --- ABA PERFIL ---
   Widget _buildCorpoPerfil() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const CircleAvatar(
-            radius: 50,
+          CircleAvatar(
+            radius: 60,
             backgroundColor: AppColors.CorPrincipal,
-            child: Icon(Icons.person, size: 50, color: Colors.white),
+            backgroundImage:
+                viewModel.fotoUrl != null && viewModel.fotoUrl!.isNotEmpty
+                ? NetworkImage(viewModel.fotoUrl!)
+                : null,
+            child: viewModel.fotoUrl == null || viewModel.fotoUrl!.isEmpty
+                ? const Icon(
+                    Icons.person,
+                    size: 60,
+                    color: AppColors.CorPrincipal,
+                  )
+                : null,
           ),
           Espaco.h16,
-          const Text(
-            'Dra. Thais Tardelli',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          Text(
+            viewModel.nomeAdmin,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          const Text('Dentista - Admin', style: TextStyle(color: Colors.grey)),
-          Espaco.h32,
           const Text(
-            'Customização de Perfil em breve...',
-            style: TextStyle(fontStyle: FontStyle.italic),
+            'Cirurgiã Dentista',
+            style: TextStyle(color: Colors.grey, fontSize: 16),
+          ),
+          Espaco.h32,
+          ElevatedButton.icon(
+            onPressed: () =>
+                Navigator.pushNamed(context, AppRoutes.editProfile),
+            icon: const Icon(Icons.edit, color: Colors.white),
+            label: const Text(
+              "Editar meu Perfil",
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.CorPrincipal,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  // --- LISTA COM DADOS DO FIREBASE ---
   Widget _buildListaAgendamentos() {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
@@ -128,17 +204,10 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) return const Text('Erro ao carregar.');
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting)
           return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.data!.docs.isEmpty) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Text('Nenhum agendamento.'),
-            ),
-          );
-        }
+        if (snapshot.data!.docs.isEmpty)
+          return const Center(child: Text('Nenhum agendamento para hoje.'));
 
         return Column(
           children: snapshot.data!.docs.map((doc) {
@@ -147,7 +216,9 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
               docId: doc.id,
               hora: data['hora'] ?? '--:--',
               servico: data['servico'] ?? 'Consulta',
-              nome: data['nomePaciente'] ?? 'Paciente sem nome',
+              nome: data['nomePaciente'] ?? 'Paciente',
+
+              fotoPaciente: data['pacientePhotoUrl'],
             );
           }).toList(),
         );
@@ -155,38 +226,41 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
     );
   }
 
-  // --- CARD DO PACIENTE (Borda no lugar da sombra) ---
   Widget _buildCardAgendamento({
     required String docId,
     required String hora,
     required String servico,
     required String nome,
+    String? fotoPaciente,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppColors.CorPrincipal,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              hora,
-              style: const TextStyle(
-                color: AppColors.CorPrincipal,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          // FOTO DO PACIENTE (MAURO)
+          CircleAvatar(
+            radius: 25,
+            backgroundColor: const Color(0xFFF0F0F0),
+            backgroundImage: fotoPaciente != null && fotoPaciente.isNotEmpty
+                ? NetworkImage(fotoPaciente)
+                : null,
+            child: fotoPaciente == null || fotoPaciente.isEmpty
+                ? const Icon(Icons.person, color: Colors.grey)
+                : null,
           ),
-          Espaco.w16,
+          Espaco.w12,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,14 +273,15 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
                   ),
                 ),
                 Text(
-                  servico,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  "$servico • $hora",
+                  style: const TextStyle(color: Colors.grey, fontSize: 13),
                 ),
               ],
             ),
           ),
+          // BOTÃO DE CANCELAR (X)
           IconButton(
-            icon: const Icon(Icons.cancel, color: Colors.redAccent),
+            icon: const Icon(Icons.cancel_outlined, color: Colors.redAccent),
             onPressed: () => _confirmarExclusao(docId),
           ),
         ],
@@ -214,34 +289,44 @@ class _HomeAdminPageState extends State<HomeAdminPage> {
     );
   }
 
+  // Função para deletar o agendamento
   Future<void> _confirmarExclusao(String docId) async {
-    bool? deletar = await showDialog(
+    final bool? confirmar = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Cancelar Horário?'),
-        content: const Text('Deseja realmente remover este agendamento?'),
+        title: const Text("Cancelar Consulta"),
+        content: const Text("Tem certeza que deseja remover este agendamento?"),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Voltar'),
+            child: const Text("Não"),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Confirmar', style: TextStyle(color: Colors.red)),
+            child: const Text(
+              "Sim, cancelar",
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
     );
 
-    if (deletar == true) {
+    if (confirmar == true) {
       await FirebaseFirestore.instance
           .collection('agendamentos')
           .doc(docId)
           .delete();
-      if (mounted)
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Agendamento removido!')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Agendamento cancelado com sucesso!")),
+        );
+      }
     }
+  }
+
+  Future<void> _confirmarSair() async {
+    await viewModel.deslogar();
+    if (mounted) Navigator.pushReplacementNamed(context, AppRoutes.login);
   }
 }

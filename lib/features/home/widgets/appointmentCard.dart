@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
+import 'package:pi_projeto/app/routes/app_routes.dart';
 
 class AppointmentCard extends StatelessWidget {
   const AppointmentCard({super.key});
@@ -165,7 +166,15 @@ class AppointmentCard extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // Aqui você pode levar o usuário de volta para a AgendaPage
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.agenda,
+                          arguments: {
+                            'docId': docId,
+                            'isRemarcacao': true,
+                            'servico': dados['servico'],
+                          },
+                        );
                       },
                       child: const Text(
                         'Remarcar',
