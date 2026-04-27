@@ -1,7 +1,7 @@
 # Casos de Uso - Dra. Thais Tardelli
 
 ## Visão Geral do Sistema
-![Diagrama de Casos de Uso Geral](./diagramas/casos_uso_geral.png)
+![Diagrama de Casos de Uso Geral](../diagramas/casos_uso_geral.png)
 
 ---
 
@@ -14,7 +14,7 @@
 2. O usuário insere dados pessoais e histórico básico.
 3. O sistema valida os dados e salva o perfil.
 
-![Diagrama UC01](./diagramas/UC01.png)
+![Diagrama UC01](../diagramas/UC01.png)
 
 ---
 
@@ -28,7 +28,7 @@
 3. **Fluxo de Exceção (Emergência):** Se o paciente selecionar "Dor Aguda", o sistema prioriza horários de encaixe ou fornece contato direto (RN03).
 4. O paciente confirma a escolha.
 
-![Diagrama UC02](./diagramas/UC02.png)
+![Diagrama UC02](../diagramas/UC02.png)
 
 ---
 
@@ -41,7 +41,7 @@
 2. O paciente clica no link de confirmação recebido.
 3. O status da consulta muda para "Confirmada" (RN04).
 
-![Diagrama UC03](./diagramas/UC03.png)
+![Diagrama UC03](../diagramas/UC03.png)
 
 ---
 
@@ -54,7 +54,7 @@
 2. O sistema verifica se a solicitação está sendo feita com mais de 24h de antecedência (RN01).
 3. Se sim, o cancelamento é processado sem custos.
 
-![Diagrama UC04](./diagramas/UC04.png)
+![Diagrama UC04](../diagramas/UC04.png)
 
 ---
 
@@ -68,7 +68,7 @@
 3. O sistema processa as imagens localmente para garantir privacidade (RN05).
 4. Todos os dados são salvos com criptografia conforme LGPD (RN06).
 
-![Diagrama UC05](./diagramas/UC05.png)
+![Diagrama UC05](../diagramas/UC05.png)
 
 ---
 
@@ -81,7 +81,7 @@
 2. O sistema solicita o upload ou captura de uma foto atual e seleciona a foto anterior (âncora).
 3. A IA processa as imagens, sobrepõe as camadas e gera um gráfico de retração ou clareamento.
 
-![Diagrama UC06](./diagramas/UC06.png)
+![Diagrama UC06](../diagramas/UC06.png)
 
 ---
 
@@ -94,7 +94,7 @@
 2. O sistema dispara mensagens automáticas via chat/push em intervalos pré-definidos (4h, 12h, 24h).
 3. O paciente interage confirmando bem-estar ou relatando sintomas.
 
-![Diagrama UC07](./diagramas/UC07.png)
+![Diagrama UC07](../diagramas/UC07.png)
 
 ---
 
@@ -107,7 +107,7 @@
 2. O sistema ativa a câmera frontal e aplica o filtro 3D com as lentes de contato dentais.
 3. O usuário visualiza o resultado e salva a imagem para anexar à solicitação de orçamento.
 
-![Diagrama UC08](./diagramas/UC08.png)
+![Diagrama UC08](../diagramas/UC08.png)
 
 ---
 
@@ -120,7 +120,7 @@
 2. O sistema processa a imagem via algoritmo de visão computacional para identificar cáries ou inflamações.
 3. O sistema destaca as áreas afetadas e sugere o código CID para preenchimento automático do prontuário.
 
-![Diagrama UC09](./diagramas/UC09.png)
+![Diagrama UC09](../diagramas/UC09.png)
 
 ---
 
@@ -133,12 +133,12 @@
 2. O sistema filtra pacientes em espera com base em localização (proximidade) e urgência do perfil.
 3. O sistema envia uma notificação de "Vaga Prioritária" para os candidatos selecionados e confirma o primeiro aceite.
 
-![Diagrama UC10](./diagramas/UC10.png)
+![Diagrama UC10](../diagramas/UC10.png)
 
 ---
 
 ## Estrutura de Dados
 
 ### Diagrama de Classes
-![Diagrama de Classes](./diagramas/diagrama_classes.png)
+![Diagrama de Classes](../diagramas/diagrama_classes.png)
 
