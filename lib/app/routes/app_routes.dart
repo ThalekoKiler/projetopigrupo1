@@ -7,4 +7,7 @@ abstract class AppRoutes {
   static const String homeAdmin = '/home-admin';
   static const String editProfile = '/edit-profile';
   static const String chatIa = '/chat-ia';
+  static const String carteirinha = '/carteirinha';
+  static const String adminSelecaoPaciente = '/admin-selecao';
+  static const String exames = '/exames';
 }

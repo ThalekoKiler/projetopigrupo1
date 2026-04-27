@@ -1,9 +1,39 @@
+import "package:firebase_auth/firebase_auth.dart";
 import "package:flutter/material.dart";
 import "package:pi_projeto/app/routes/app_routes.dart";
+import 'package:url_launcher/url_launcher.dart';
 
 class QuickAccessGrid extends StatelessWidget {
   final Color primaryColor;
   const QuickAccessGrid({super.key, required this.primaryColor});
+
+  Future<void> _chamarEmergencia(BuildContext context) async {
+    final Uri launchUri = Uri(scheme: 'tel', path: '+5519981376210');
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Chamada de Emergência"),
+        content: const Text("Deseja ligar para o consultório agora?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancelar"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
+            onPressed: () async {
+              Navigator.pop(context);
+              if (await canLaunchUrl(launchUri)) {
+                await launchUrl(launchUri);
+              }
+            },
+            child: const Text("Ligar", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +51,29 @@ class QuickAccessGrid extends StatelessWidget {
           label: 'Meus\nExames',
           color: primaryColor,
           onTap: () {
-            print("Clicou em Exames");
+            Navigator.pushNamed(
+              context,
+              AppRoutes.exames,
+              arguments: {
+                'pacienteUid': FirebaseAuth.instance.currentUser!.uid,
+                'roleUsuarioLogado': 'paciente',
+              },
+            );
           },
         ),
         QuickAccessItem(
           icon: Icons.badge_outlined,
           label: 'Carteirinha',
           color: primaryColor,
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.carteirinha);
+          },
         ),
         QuickAccessItem(
           icon: Icons.phone_in_talk,
           label: 'Emergência',
           color: primaryColor,
-          onTap: () {},
+          onTap: () => _chamarEmergencia(context),
         ),
       ],
     );

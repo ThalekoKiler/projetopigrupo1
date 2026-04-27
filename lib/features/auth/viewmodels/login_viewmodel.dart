@@ -11,6 +11,8 @@ class LoginViewModel extends ChangeNotifier {
 
   bool obscurePassword = true;
   bool isLoading = false;
+  String? message;
+  bool isError = false;
 
   // Criação das Instâncias da Google e Firebase
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -31,6 +33,30 @@ class LoginViewModel extends ChangeNotifier {
   void togglePasswordVisibility() {
     obscurePassword = !obscurePassword;
     notifyListeners();
+  }
+
+  Future<void> recuperarSenha(String email) async {
+    if (email.isEmpty) {
+      _showSnackBar("Por favor, digite um e-mail.", true);
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email.trim());
+      _showSnackBar("E-mail de recuperação enviado com sucesso!", false);
+    } catch (e) {
+      _showSnackBar("Erro ao enviar e-mail: ${e.toString()}", true);
+    }
+  }
+
+  void _showSnackBar(String text, bool error) {
+    message = text;
+    isError = error;
+    notifyListeners();
+  }
+
+  void clearMessage() {
+    message = null;
   }
 
   // --- FUNÇÃO AUXILIAR PARA DECIDIR A ROTA ---

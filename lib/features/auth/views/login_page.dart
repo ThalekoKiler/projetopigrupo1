@@ -42,11 +42,56 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  void _mostrarDialogRecuperarSenha(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Recuperar Senha"),
+        content: TextField(
+          controller: emailController,
+          decoration: const InputDecoration(
+            labelText: "Digite seu e-mail",
+            hintText: "exemplo@email.com",
+          ),
+          keyboardType: TextInputType.emailAddress,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancelar"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Chama a função da ViewModel que criamos no passo anterior
+              viewModel.recuperarSenha(emailController.text);
+              Navigator.pop(context);
+            },
+            child: const Text("Enviar"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: viewModel,
       builder: (context, _) {
+        if (viewModel.message != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(viewModel.message!),
+                backgroundColor: viewModel.isError ? Colors.red : Colors.green,
+              ),
+            );
+
+            viewModel.clearMessage();
+          });
+        }
         return Scaffold(
           backgroundColor: AppColors.CorPrincipal,
           appBar: AppBar(
@@ -137,7 +182,9 @@ class _LoginPageState extends State<LoginPage> {
                             const SubtitulosCadastro(texto: 'Manter conectado'),
                             Subtittlebutton(
                               text: 'Esqueceu a senha?',
-                              onPressed: () {},
+                              onPressed: () {
+                                _mostrarDialogRecuperarSenha(context);
+                              },
                             ),
                           ],
                         ),
