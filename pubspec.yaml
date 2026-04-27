@@ -44,6 +44,7 @@ dependencies:
   intl: ^0.20.2
   image_picker: ^1.1.2
   google_generative_ai: ^0.4.0
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,7 @@ flutter:
     - assets/images/icon.png
     - assets/images/map_preview.png.png
     - assets/images/Tooth.png
+    - assets/images/dog.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

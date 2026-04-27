@@ -42,7 +42,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
-        title: const Text("IA Dentista"),
+        title: const Text("Assistente Luna"),
         backgroundColor: AppColors.CorPrincipal,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -156,7 +156,7 @@ class _ChatPageState extends State<ChatPage> {
               radius: 18,
               backgroundColor: Colors.transparent,
               child: Image.asset(
-                'assets/images/ai_assistant.png',
+                'assets/images/dog.png',
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) =>
                     const Icon(Icons.smart_toy, color: AppColors.CorPrincipal),

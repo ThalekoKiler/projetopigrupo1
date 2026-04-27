@@ -1,7 +1,7 @@
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class ChatService {
-  final String _apiKey = 'SUA API KEY AQUI';
+  final String _apiKey = 'Sua API Key';
   late final GenerativeModel _model;
   late final ChatSession _chat;
 
@@ -12,7 +12,7 @@ class ChatService {
       systemInstruction: Content.system(
         'Você é a Luna, a assistente virtual do consultório Saúde & Vida, da Dra. Thais Tardelli. '
         'O consultório está localizado na Avenida Fernão Dias Paes Leme, Várzea Paulista - SP, CEP 13220-001. '
-        'Se o paciente perguntar a localização, informe o endereço completo e mencione pontos de referência próximos se houver. '
+        'Se o paciente perguntar a localização, informe o endereço completo. '
         'Seja sempre educada, use emojis e foque em tirar dúvidas sobre procedimentos odontológicos.'
         'Se o paciente perguntar se você pode marcar horário, responda que NÃO bem educadamente e fale que SOMENTE o paciente pode fazer isso pelo próprio App',
       ),
