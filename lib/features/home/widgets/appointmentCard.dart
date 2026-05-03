@@ -26,7 +26,49 @@ class AppointmentCard extends StatelessWidget {
           );
         }
 
-        var doc = snapshot.data!.docs.first;
+        // Filtra os agendamentos mantendo apenas a partir de hoje
+        var hoje = DateTime.now();
+        var inicioHoje = DateTime(hoje.year, hoje.month, hoje.day);
+
+        var docsAtuais = snapshot.data!.docs.where((doc) {
+          var dados = doc.data() as Map<String, dynamic>;
+          DateTime dataAgendamento = (dados['data'] as Timestamp).toDate();
+          DateTime diaAgendamento = DateTime(
+            dataAgendamento.year,
+            dataAgendamento.month,
+            dataAgendamento.day,
+          );
+
+          // Retorna true se for hoje ou no futuro
+          return diaAgendamento.isAfter(inicioHoje) ||
+              diaAgendamento.isAtSameMomentAs(inicioHoje);
+        }).toList();
+
+        // Ordena os agendamentos pela data e hora mais próxima
+        docsAtuais.sort((a, b) {
+          var dadosA = a.data() as Map<String, dynamic>;
+          var dadosB = b.data() as Map<String, dynamic>;
+
+          DateTime dataA = (dadosA['data'] as Timestamp).toDate();
+          DateTime dataB = (dadosB['data'] as Timestamp).toDate();
+
+          int compareDates = dataA.compareTo(dataB);
+          if (compareDates != 0) {
+            return compareDates;
+          }
+
+          String horaA = dadosA['hora'] ?? '--:--';
+          String horaB = dadosB['hora'] ?? '--:--';
+          return horaA.compareTo(horaB);
+        });
+
+        if (docsAtuais.isEmpty) {
+          return const Center(
+            child: Text("Você não possui agendamentos ativos."),
+          );
+        }
+
+        var doc = docsAtuais.first;
         var dados = doc.data() as Map<String, dynamic>;
         String docId = doc.id;
 
@@ -40,11 +82,11 @@ class AppointmentCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
-                color: Colors.black,
+                color: Colors.black12,
                 blurRadius: 10,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               ),
             ],
           ),
