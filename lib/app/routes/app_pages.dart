@@ -3,6 +3,7 @@ import 'package:pi_projeto/app/routes/app_routes.dart';
 import 'package:pi_projeto/features/auth/views/login_page.dart';
 import 'package:pi_projeto/features/auth/views/register_page.dart';
 import 'package:pi_projeto/features/chat/views/chat_page.dart';
+import 'package:pi_projeto/features/chat/views/clareamento_page.dart';
 import 'package:pi_projeto/features/home/pages/admin_selecao_paciente_page.dart';
 import 'package:pi_projeto/features/home/pages/agenda_page.dart';
 import 'package:pi_projeto/features/home/pages/carteirinha_page.dart';
@@ -35,5 +36,6 @@ abstract class AppPages {
         roleUsuarioLogado: args['roleUsuarioLogado'],
       );
     },
+    AppRoutes.clareamento: (_) => const ClareamentoPage(),
   };
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pi_projeto/core/theme/app_colors.dart';
 import 'package:pi_projeto/features/chat/viewmodels/chat_viewmodel.dart';
 
+import '../../../app/routes/app_routes.dart';
+
 class ChatPage extends StatefulWidget {
   final String? mensagemInicial;
   const ChatPage({super.key, this.mensagemInicial});
@@ -223,7 +225,15 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildInputBar() {
     return Row(
       children: [
-        const Icon(Icons.camera_alt_outlined, color: Colors.grey),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.clareamento);
+          },
+          child: const Icon(
+            Icons.camera_alt_outlined,
+            color: AppColors.CorPrincipal,
+          ),
+        ),
         const SizedBox(width: 10),
         const Icon(Icons.attach_file, color: Colors.grey),
         const SizedBox(width: 10),

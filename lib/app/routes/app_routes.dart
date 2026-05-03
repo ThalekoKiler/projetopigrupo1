@@ -10,4 +10,5 @@ abstract class AppRoutes {
   static const String carteirinha = '/carteirinha';
   static const String adminSelecaoPaciente = '/admin-selecao';
   static const String exames = '/exames';
+  static const String clareamento = '/clareamento';
 }
