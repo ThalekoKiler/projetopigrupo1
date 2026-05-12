@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class ChatService {
@@ -27,6 +28,22 @@ class ChatService {
     } catch (e) {
       print("ERRO REAL DO GEMINI: $e");
       return "Desculpe, estou passando por uma manutenção rápida. Tente novamente mais tarde";
+    }
+  }
+
+  Future<String?> enviarMensagemComArquivo(
+    String mensagem,
+    Uint8List fileBytes,
+    String mimeType,
+  ) async {
+    try {
+      final filePart = DataPart(mimeType, fileBytes);
+      final response = await _chat.sendMessage(
+        Content.multi([TextPart(mensagem), filePart]),
+      );
+      return response.text;
+    } catch (e) {
+      return "Erro ao analisar documento.";
     }
   }
 }

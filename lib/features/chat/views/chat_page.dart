@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pi_projeto/core/theme/app_colors.dart';
 import 'package:pi_projeto/features/chat/viewmodels/chat_viewmodel.dart';
+import 'package:file_picker/file_picker.dart';
 
 import '../../../app/routes/app_routes.dart';
 
@@ -90,7 +91,7 @@ class _ChatPageState extends State<ChatPage> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "IA está digitando...",
+                    "Luna está digitando...",
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 12,
@@ -235,7 +236,29 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ),
         const SizedBox(width: 10),
-        const Icon(Icons.attach_file, color: Colors.grey),
+        GestureDetector(
+          onTap: () async {
+            FilePickerResult? result = await FilePicker.platform.pickFiles(
+              type: FileType.custom,
+              allowedExtensions: ['pdf', 'txt'],
+              withData: true,
+            );
+
+            if (result != null && result.files.single.bytes != null) {
+              viewModel.enviarDocumentoParaLuna(
+                "Luna, analise este documento de exame",
+                result.files.single.bytes!,
+                result.files.single.extension == 'pdf'
+                    ? 'application/pdf'
+                    : 'text/plain',
+              );
+            }
+          },
+          child: const Icon(
+            Icons.attach_file,
+            color: AppColors.CorPrincipal,
+          ),
+        ),
         const SizedBox(width: 10),
         Expanded(
           child: Container(
